@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv sh
+
+START_APACHE2=${START_APACHE2:-YES}
+
+if [ "$START_APACHE2" = "YES" ]; then
+    rm /etc/services.d/apache2/down
+fi
