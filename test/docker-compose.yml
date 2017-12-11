@@ -3,10 +3,15 @@ apache2:
   hostname: apache2
   environment:
     - SERVER_NAME=localhost
-    - SERVER_PORT=80
     - CREATE_TESTUSER=YES
+    #- SSL=YES
+    #- SSL_KEY=/path_to_key/ssl.key
+    #- SSL_CERT=/path_to_cert/ssl.crt
   volumes:
-    - ./testuser/auth:/var/www/testuserauth
+    #- /local_path_to_key/ssl.key:/path_to_key.key
+    #- /local_path_to_cert/ssl.crt:/path_to_cert.crt
     - ./davshares:/etc/apache2/davshares
+    - ./testuser/auth:/var/www/testuserauth
   ports:
     - "8080:80"
+    #- "8443:443"
