@@ -1,6 +1,6 @@
 # apache2 webdav in docker with alpine linux
 
-## example vritualhost
+## example share conf
 
 ```apacheconf
 Alias /testuser "/var/www/testuser/webdav"

@@ -1,1 +1,2 @@
+#!/usr/bin/execlineb -P
 /usr/sbin/apachectl -D FOREGROUND
