@@ -5,7 +5,7 @@
 ```apacheconf
 Alias /testuser "/var/www/testuser/webdav"
 <Directory "/var/www/testuser/webdav">
-    Include /etc/apache2/webdav_vhost.conf
+    Include /etc/apache2/webdav_defaults.conf
     AuthUserFile "/var/www/testuser/auth/users"
 </Directory>
 ```
