@@ -10,6 +10,9 @@ Just checkout the code and run `docker-compose up` in the test folder.
 After that you can connect to `http://localhost:8080/testuser` with
 the user/pwd testuser/testuser.
 
+This image is in docker hub under `https://hub.docker.com/r/yvess/alpine-apache2-webdav/`
+you can pull it with `docker pull alpine-apache2-webdav:latest`.
+
 ## docker-compose.yml
 
 Here is a example `docker-compose.yml` file to configure the service,
