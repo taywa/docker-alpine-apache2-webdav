@@ -1,7 +1,36 @@
 #!/usr/bin/with-contenv sh
 
 START_APACHE2=${START_APACHE2:-YES}
+CREATE_TESTUSER=${CREATE_TESTUSER:-NO}
+WWW_DATA_UID=${WWW_DATA_UID:-33}
+WWW_DATA_GID=${WWW_DATA_GID:-33}
 
 if [ "$START_APACHE2" = "YES" ]; then
     rm /etc/services.d/apache2/down
+fi
+
+SERVER_NAME=${SERVER_NAME:-localhost}
+SERVER_PORT=${SERVER_PORT:-80}
+
+# CONFIGURE APACHE CONF AND WWW USER
+if grep -q "SERVER_PORT" /etc/apache2/httpd.conf; then
+    addgroup -g $WWW_DATA_GID www-data
+    adduser -G www-data -g "www user" -D -h /var/www -s /sbin/nologin -u $WWW_DATA_UID www-data
+    mkdir -p /var/www/webdav /var/lib/apache2 /var/log/apache2
+    chown www-data:www-data /var/lib/apache2 /var/log/apache2
+    echo "* configure httpd.conf"
+    sed -i \
+        -e "s#-SERVER_NAME-#${SERVER_NAME}#" \
+        -e "s#-SERVER_PORT-#${SERVER_PORT}#" \
+      /etc/apache2/httpd.conf
+    sed -i \
+        -e "s# modules/# /usr/lib/apache2/#" \
+        -e "s# logs/# /var/log/apache2/#" \
+      /etc/apache2/conf.d/ssl.conf
+fi
+
+
+if [ "$CREATE_TESTUSER" = "YES" ] && [ ! -d "/var/www/testuser/webdav" ]; then
+    mkdir -p /var/www/testuser/webdav
+    chown www-data:www-data /var/www/testuser/webdav
 fi

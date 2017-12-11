@@ -9,10 +9,7 @@ RUN apk add --update curl apache2-webdav apache2-ssl apache2-ctl apache2-utils &
     && apk del curl \
     && deluser xfs \
     && delgroup www-data \
-    && addgroup -g 33 www-data \
-    && adduser -G www-data -g "www user" -D -h /var/www -s /sbin/nologin -u 33 www-data \
-    && rm -rfv /var/cache/apk/* \
-    && mkdir -p /var/www/webdav; mkdir -p /var/lib/apache2; chown www-data:www-data /var/lib/apache2
+    && rm -rfv /var/cache/apk/*
 ADD files.tar /
 ENTRYPOINT ["/init"]
 EXPOSE 80
