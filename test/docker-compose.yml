@@ -1,0 +1,12 @@
+apache2:
+  image: yvess/alpine-apache2-webdav:0.1
+  hostname: apache2
+  environment:
+    - SERVER_NAME=localhost
+    - SERVER_PORT=80
+    - CREATE_TESTUSER=YES
+  volumes:
+    - ./testuser/auth:/var/www/testuserauth
+    - ./davshares:/etc/apache2/davshares
+  ports:
+    - "8080:80"
