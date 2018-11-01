@@ -1,5 +1,5 @@
 apache2:
-  image: yvess/alpine-apache2-webdav:0.1
+  image: yvess/alpine-apache2-webdav:0.2
   hostname: apache2
   environment:
     - SERVER_NAME=localhost
@@ -10,6 +10,7 @@ apache2:
   volumes:
     #- /local_path_to_key/ssl.key:/path_to_key.key
     #- /local_path_to_cert/ssl.crt:/path_to_cert.crt
+    - ..:/usr/local/src_webdav
     - ./davshares:/etc/apache2/davshares
     - ./testuser/auth:/var/www/testuserauth
   ports:
