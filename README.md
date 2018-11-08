@@ -1,13 +1,13 @@
-# minimal apache2 webdav in docker with alpine linux
+# minimal apache2/webdav vsftpd dockerimage with alpine linux
 
-This image provides apache webdav serving with just 17MB (uncompressed).
+This image provides apache webdav ans vsftpd serving with just 20MB (uncompressed).
 It's build to be customizable and for multiple shares.
 
 Each share is defined with an alias.
 
 You can create a test container with the `test/docker-compose.yml` file.
 Just checkout the code and run `docker-compose up` in the test folder.
-After that you can connect to `http://localhost:8080/testuser` with
+After that you can connect to `https://localhost:8443/testuser` with
 the user/pwd testuser/testuser.
 
 This image is in docker hub under `https://hub.docker.com/r/yvess/alpine-apache2-webdav/`
@@ -34,10 +34,13 @@ apache2:
     - /local_path_to_key/ssl.key:/path_to_key.key
     - /local_path_to_cert/ssl.crt:/path_to_cert.crt
     - ./davshares:/etc/apache2/davshares
-    - /your_path/auth:/var/www/testuser_auth
-    - /your_path/your_dir:/var/www/testuser_webdav
+    - ./your_path/auth:/etc/auth
+    - /your_path/your_dir:/var/www/testuser
   ports:
-    - "8443:443"
+    - "127.0.0.1:8080:80"
+    - "127.0.0.1:8443:443"
+    - "127.0.0.1:21:21"
+    - "127.0.0.1:21100-21110:21100-21110"
 ```
 
 The `WWW_DATA_UID` and `WWW_DATA_GID` env vars are optional and set so that it matches the ubuntu default of
@@ -51,10 +54,10 @@ You can have multiple shares in the folder `davshares` (can be changed).
 The share file `testuser.conf` in `davshares` looks like this.
 
 ```apacheconf
-Alias /testuser "/var/www/testuser_webdav"
-<Directory "/var/www/testuser_webdav">
+Alias /testuser "/var/www/testuser"
+<Directory "/var/www/testuser">
     Include /etc/apache2/webdav_defaults.conf
-    AuthUserFile "/var/www/testuser_auth/users"
+    AuthUserFile "/etc/auth/apache2/testuser/users.passwd"
 </Directory>
 ```
 
@@ -62,15 +65,16 @@ Also mount the shares dir and auth files into the container.
 
 ```yaml
 ..
-    - ./testuser_webdav:/var/www/testuser_webdav
-    - ./testuser_auth:/var/www/testuser_auth
+    - ./testuser:/var/www/testuser
 ..
 ```
 
-Inside or outside the container you you need to create htdigest password files with following command.
-The realm is always webdav. Replace `password_file` `testuser` with your own settings.
-(`users` is used for the `password_file` in the examples here).
+Inside the container you can create password files and share files with following command.
 
 ```bash
-htdigest -c password_file webdav testuser
+$ create_user.sh -h
+usage: create_user_share.sh [-w] [-f] [-s sharename] username] | [-h]
+$ create_user.sh testuser
 ```
+
+The usernmae:password testuser:testuser is used for testing.
