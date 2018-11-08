@@ -4,10 +4,10 @@ ENV LANG en_US.utf8
 
 RUN apk add --update \
         curl \
+        bash \
         apache2-webdav \
         apache2-ssl \
         apache2-ctl \
-        apache2-utils \
         ca-certificates \
         vsftpd \
         linux-pam \
