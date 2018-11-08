@@ -1,4 +1,4 @@
-.PHONY: all
+.PHONY: all enter
 
 DOCKER_NAME=$(shell basename `pwd`|tr -d '_')_apache2_1
 DOCKER_EXEC=$(shell command -v docker > /dev/null && echo "docker exec -it $(DOCKER_NAME)")
@@ -12,8 +12,8 @@ start_apache2:
 stop_apache2:
 	$(DOCKER_EXEC) s6-svc -d /var/run/s6/services/apache2
 
-start-pureftpd:
-	$(DOCKER_EXEC) s6-svc -u /var/run/s6/services/pure-ftpd
+start-vsftpd:
+	$(DOCKER_EXEC) s6-svc -u /var/run/s6/services/vsftpd
 
-stop-pureftpd:
-	$(DOCKER_EXEC) s6-svc -d /var/run/s6/services/pure-ftpd
+stop-vsftpd:
+	$(DOCKER_EXEC) s6-svc -d /var/run/s6/services/vsftpd
