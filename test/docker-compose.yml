@@ -1,8 +1,8 @@
 apache2:
-  image: yvess/alpine-apache2-webdav:0.2
+  image: yvess/alpine-apache2-webdav:0.3
   hostname: apache2
   environment:
-    - SERVER_NAME=localhost
+    - APACHE_SERVER_NAME=localhost
     - CREATE_TESTUSER=YES
     #- SSL=YES
     #- SSL_KEY=/path_to_key/ssl.key
@@ -12,7 +12,10 @@ apache2:
     #- /local_path_to_cert/ssl.crt:/path_to_cert.crt
     - ..:/usr/local/src_webdav
     - ./davshares:/etc/apache2/davshares
+    - ./auth:/etc/auth
     - ./testuser/auth:/var/www/testuserauth
   ports:
-    - "8080:80"
+    - "127.0.0.1:8080:80"
+    - "127.0.0.1:2121:21"
+    - "127.0.0.1:30000-30020:30000-30020"
     #- "8443:443"

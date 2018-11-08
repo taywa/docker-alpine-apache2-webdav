@@ -1,0 +1,3 @@
+#!/usr/bin/execlineb -P
+
+pure-ftpd /etc/pure-ftpd.conf

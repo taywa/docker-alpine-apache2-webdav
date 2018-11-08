@@ -34,7 +34,7 @@ apache2:
     - /local_path_to_key/ssl.key:/path_to_key.key
     - /local_path_to_cert/ssl.crt:/path_to_cert.crt
     - ./davshares:/etc/apache2/davshares
-    - /your_path/auth:/var/www/testuser_auth
+    - ./your_path/auth:/etc/auth
     - /your_path/your_dir:/var/www/testuser_webdav
   ports:
     - "8443:443"
@@ -63,7 +63,6 @@ Also mount the shares dir and auth files into the container.
 ```yaml
 ..
     - ./testuser_webdav:/var/www/testuser_webdav
-    - ./testuser_auth:/var/www/testuser_auth
 ..
 ```
 
@@ -73,4 +72,9 @@ The realm is always webdav. Replace `password_file` `testuser` with your own set
 
 ```bash
 htdigest -c password_file webdav testuser
+pure-pw useradd testuser -f /etc/auth/pure-ftpd/pureftpd.passwd -u www-data -d /var/www/testuser/webdav/
+pure-pw mkdb /etc/auth/pure-ftpd/pureftpd.pdb -f /etc/auth/pure-ftpd/pureftpd.passwd
 ```
+
+The usernmae:password testuser:testuser is used for testing.
+pure-pw passwd testuser -f /etc/auth/pure-ftpd/pureftpd.passwd
