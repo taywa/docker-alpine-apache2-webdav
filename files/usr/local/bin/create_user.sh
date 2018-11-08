@@ -5,6 +5,8 @@ only_ftp=false
 username=""
 sharename=""
 
+mkdir -p /etc/auth/vsftpd/users/
+mkdir -p /etc/auth/apache2
 
 usage()
 {
@@ -35,8 +37,8 @@ create_ftp()
     echo "create ftp share:$sharename username:$username"
     share_conf="local_root=/var/www/$sharename/"
     echo "$share_conf" > /etc/auth/vsftpd/users/$username
-    mkdir -p /etc/auth/apache2/$sharename
-    echo "$share_conf" > /etc/auth/apache2/$sharename/share.conf
+    mkdir -p /etc/auth/vsftpd/$sharename
+    echo "$share_conf" > /etc/auth/vsftpd/$sharename/share.conf
     passwd_hash=$(openssl passwd -1)
     echo "$username:$passwd_hash" >> /etc/auth/vsftpd/users.passwd
 

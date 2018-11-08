@@ -3,10 +3,12 @@ apache2:
   hostname: apache2
   environment:
     - APACHE_SERVER_NAME=localhost
+    - VSFTPD_PASV_ADDRESS=localhost
     - CREATE_TESTUSER=YES
     - SSL=YES
     - SSL_KEY=/etc/auth/localhost_vsftpd.key
     - SSL_CERT=/etc/auth/localhost_vsftpd.cert
+
   volumes:
     #- /local_path_to_key/ssl.key:/path_to_key.key
     #- /local_path_to_cert/ssl.crt:/path_to_cert.crt
