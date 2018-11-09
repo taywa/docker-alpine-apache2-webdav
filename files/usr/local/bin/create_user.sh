@@ -16,7 +16,7 @@ usage()
 
 create_www()
 {
-    echo "create www share:$sharename username:$username"
+    echo -e "\ncreate www share:$sharename username:$username"
     share_conf=$(cat <<EOF
 Alias /$sharename "/var/www/$sharename"
 <Directory "/var/www/$sharename">
@@ -27,20 +27,26 @@ EOF
     )
     mkdir -p /etc/auth/apache2/$sharename
     echo "$share_conf" > /etc/auth/apache2/$sharename/share.conf
-    passwd_hash=$(openssl passwd -apr1)
+    while [ -z "$passwd_hash" ]; do
+        passwd_hash=$(openssl passwd -apr1)
+    done
     echo "$username:$passwd_hash" >> /etc/auth/apache2/$sharename/users.passwd
+    passwd_hash=""
 }
 
 
 create_ftp()
 {
-    echo "create ftp share:$sharename username:$username"
+    echo -e "\ncreate ftp share:$sharename username:$username"
     share_conf="local_root=/var/www/$sharename/"
     echo "$share_conf" > /etc/auth/vsftpd/users/$username
     mkdir -p /etc/auth/vsftpd/$sharename
     echo "$share_conf" > /etc/auth/vsftpd/$sharename/share.conf
-    passwd_hash=$(openssl passwd -1)
+    while [ -z "$passwd_hash" ]; do
+        passwd_hash=$(openssl passwd -1)
+    done
     echo "$username:$passwd_hash" >> /etc/auth/vsftpd/users.passwd
+    passwd_hash=""
 
 }
 
@@ -52,6 +58,11 @@ create()
     fi
 
     if [ $only_ftp == true ]; then
+        create_ftp
+    fi
+
+    if [ $only_www == false ] && [ $only_ftp == false ]; then
+        create_www
         create_ftp
     fi
 }
